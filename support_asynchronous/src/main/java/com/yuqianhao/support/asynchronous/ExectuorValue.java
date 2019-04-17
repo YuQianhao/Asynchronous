@@ -9,9 +9,9 @@ import java.util.Map;
 /**
  * Created by machunyan on 2019/4/16.
  */
-public class ExectuorValue {
+public class ExectuorValue<_Tx> {
 
-    private Object _retValue;
+    private _Tx _retValue;
 
     private int id;
 
@@ -19,11 +19,11 @@ public class ExectuorValue {
 
     protected ExectuorValue(){}
 
-    public Object getRetValue() {
+    public _Tx getRetValue() {
         return _retValue;
     }
 
-    public void setRetValue(Object _retValue) {
+    public void setRetValue(_Tx _retValue) {
         this._retValue = _retValue;
     }
 
@@ -31,7 +31,7 @@ public class ExectuorValue {
         return id;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 

@@ -1,5 +1,7 @@
 package com.yuqianhao.support.asynchronous;
 
+import android.os.Looper;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,7 +127,7 @@ public class Async {
      * @param executorComplete 捕获的结果接收器
      * @return
      */
-    public Async capture(ExecutorThread thread, final int id, final IExecutorComplete executorComplete){
+    public <_Tx> Async capture(ExecutorThread thread, final int id, final IExecutorComplete<_Tx> executorComplete){
         post(thread, new Runnable() {
             @Override
             public void run() {
@@ -134,7 +136,9 @@ public class Async {
                 }
                 executorCompleteMap.put(id,executorComplete);
                 ExectuorValue value=exectuorValueMap.get(id);
-                executorComplete.onComplete(value);
+                if(value!=null){
+                    executorComplete.onComplete(value);
+                }
             }
         });
         return this;
@@ -146,7 +150,7 @@ public class Async {
      * @param executorComplete 捕获的结果接收器
      * @return
      */
-    public Async capture(final int id,final IExecutorComplete executorComplete){
+    public  <_Tx> Async capture(final int id,final IExecutorComplete<_Tx> executorComplete){
         capture(mRunThread,id,executorComplete);
         return this;
     }
@@ -166,13 +170,28 @@ public class Async {
         return this;
     }
 
+    public Async clearList(){
+        tmpList.clear();
+        return this;
+    }
+
     public <_Tx> Async sendSet(Set<_Tx> txSet){
         tmpSet=txSet;
         return this;
     }
 
+    public Async clearSet(){
+        tmpSet.clear();
+        return this;
+    }
+
     public <_Tx,_Ty> Async sendMap(Map<_Tx,_Ty> txMap){
         tmpMap=txMap;
+        return this;
+    }
+
+    public Async clearMap(){
+        tmpMap.clear();
         return this;
     }
 
@@ -216,13 +235,15 @@ public class Async {
         return this;
     }
 
-    public Async run(Runnable runnable){
+    public synchronized Async run(Runnable runnable){
         post(mRunThread,runnable);
         return this;
     }
 
 
-    protected Async(){}
+    protected Async(){
+        mRunThread=(Looper.getMainLooper().equals(Looper.myLooper()))?ExecutorThread.MAIN:ExecutorThread.IO;
+    }
     public static Async create(){
         Async async=new Async();
         ASYNC_WEAKREF_LIST.add(new WeakReference(async));
@@ -252,11 +273,19 @@ public class Async {
     }
 
 
-    private final void post(ExecutorThread thread,Runnable runnable){
+    private synchronized final void post(ExecutorThread thread,Runnable runnable){
         if(thread==ExecutorThread.MAIN){
-            THREAD_POOL_LOOPER.run(runnable);
+            if(mRunThread==ExecutorThread.MAIN){
+                runnable.run();
+            }else{
+                THREAD_POOL_LOOPER.runUI(runnable);
+            }
         }else if(thread==ExecutorThread.IO){
-            THREAD_POOL_LOOPER.runUI(runnable);
+            if(mRunThread==ExecutorThread.IO){
+                runnable.run();
+            }else{
+                THREAD_POOL_LOOPER.run(runnable);
+            }
         }
     }
 }
