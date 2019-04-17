@@ -4,6 +4,44 @@
 
 ### 一、依赖
 
+![](https://jitpack.io/v/YuQianhao/Asynchronous.svg)
+
+#### 1、Gradle
+
+```java
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+```java
+dependencies {
+	    implementation 'com.github.YuQianhao:Asynchronous:1.0.0'
+}
+```
+
+#### 2、Maven
+
+```java
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+```
+
+```java
+<dependency>
+	<groupId>com.github.YuQianhao</groupId>
+	<artifactId>Asynchronous</artifactId>
+	<version>1.0.0</version>
+</dependency>
+```
+
 ### 二、适应场景
 
 ####         适用于切换线程频繁以及需要执行多个异步任务并在主线程等待的模块。
