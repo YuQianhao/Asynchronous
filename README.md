@@ -19,7 +19,7 @@ allprojects {
 
 ```java
 dependencies {
-	    implementation 'com.github.YuQianhao:Asynchronous:1.0.0'
+	    implementation 'com.github.YuQianhao:Asynchronous:1.0.1'
 }
 ```
 
@@ -38,7 +38,7 @@ dependencies {
 <dependency>
 	<groupId>com.github.YuQianhao</groupId>
 	<artifactId>Asynchronous</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 </dependency>
 ```
 

@@ -275,17 +275,9 @@ public class Async {
 
     private synchronized final void post(ExecutorThread thread,Runnable runnable){
         if(thread==ExecutorThread.MAIN){
-            if(mRunThread==ExecutorThread.MAIN){
-                runnable.run();
-            }else{
-                THREAD_POOL_LOOPER.runUI(runnable);
-            }
+            THREAD_POOL_LOOPER.runUI(runnable);
         }else if(thread==ExecutorThread.IO){
-            if(mRunThread==ExecutorThread.IO){
-                runnable.run();
-            }else{
-                THREAD_POOL_LOOPER.run(runnable);
-            }
+            THREAD_POOL_LOOPER.run(runnable);
         }
     }
 }
