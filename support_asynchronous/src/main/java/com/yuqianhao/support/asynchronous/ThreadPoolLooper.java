@@ -13,16 +13,30 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadPoolLooper {
 
-    protected ThreadPoolLooper(){}
+    /**异步使用单线程等待执行*/
+    public static final int TYPE_SIGNAL=0;
 
-    private static final Handler HANDLER=new Handler(Looper.getMainLooper());
-    private static final Executor EXECUTOR=new ThreadPoolExecutor(
-            0,
-            Integer.MAX_VALUE,
-            10,
-            TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>()
-    );
+    /**异步使用多线程执行*/
+    public static final int TYPE_MULTITHREADING=1;
+
+    private Handler HANDLER=new Handler(Looper.getMainLooper());
+    private Executor EXECUTOR;
+
+    protected ThreadPoolLooper(){
+        this(TYPE_MULTITHREADING);
+    }
+
+    protected ThreadPoolLooper(int type){
+        EXECUTOR=new ThreadPoolExecutor(
+                (type==TYPE_MULTITHREADING?0:1),
+                (type==TYPE_MULTITHREADING?Integer.MAX_VALUE:1),
+                1,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>()
+        );
+    }
+
+
 
     public void run(Runnable runnable){
         EXECUTOR.execute(runnable);

@@ -21,7 +21,9 @@ public class Async {
 
 
     //线程执行器
-    private static final ThreadPoolLooper THREAD_POOL_LOOPER=new ThreadPoolLooper();
+    private ThreadPoolLooper THREAD_POOL_LOOPER;
+
+
 
     //执行器结果和 id 映射表
     private Map<Integer,ExectuorValue> exectuorValueMap=new HashMap<>();
@@ -241,11 +243,17 @@ public class Async {
     }
 
 
-    protected Async(){
+    protected Async(int type){
         mRunThread=(Looper.getMainLooper().equals(Looper.myLooper()))?ExecutorThread.MAIN:ExecutorThread.IO;
+        THREAD_POOL_LOOPER=new ThreadPoolLooper(type);
     }
+
     public static Async create(){
-        Async async=new Async();
+        return create(ThreadPoolLooper.TYPE_MULTITHREADING);
+    }
+
+    public static Async create(int type){
+        Async async=new Async(type);
         ASYNC_WEAKREF_LIST.add(new WeakReference(async));
         return async;
     }

@@ -19,7 +19,7 @@ allprojects {
 
 ```java
 dependencies {
-	    implementation 'com.github.YuQianhao:Asynchronous:1.0.1'
+	    implementation 'com.github.YuQianhao:Asynchronous:1.0.2'
 }
 ```
 
